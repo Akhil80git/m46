@@ -1,0 +1,143 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard - Auto Sidebar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        /* Left Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #1e293b;
+            color: white;
+            padding: 1.5rem 0;
+            overflow-y: auto;
+            position: fixed;
+            height: 100%;
+            transition: width 0.3s;
+        }
+        .sidebar h2 {
+            padding: 0 1.5rem 1.5rem;
+            font-size: 1.5rem;
+            border-bottom: 1px solid #334155;
+            margin-bottom: 1rem;
+        }
+        .sidebar a {
+            display: block;
+            padding: 0.9rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 1.05rem;
+            transition: all 0.2s;
+        }
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #334155;
+            color: white;
+            padding-left: 2rem;
+        }
+        /* Right Content Area */
+        .content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            height: 100vh;
+            background: white;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        @media (max-width: 900px) {
+            .sidebar { width: 80px; }
+            .sidebar h2, .sidebar a span { display: none; }
+            .content { margin-left: 80px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Left Fixed Vertical Sidebar -->
+    <nav class="sidebar">
+        <h2>Menu</h2>
+        <div id="sidebar-links"></div>
+    </nav>
+
+    <!-- Right Content Area -->
+    <main class="content">
+        <iframe id="contentFrame" src="welcome.html"></iframe>
+    </main>
+</div>
+
+<script>
+// सभी .html फाइलों को ऑटो डिटेक्ट करने की कोशिश (ब्राउजर में सीधे काम नहीं करेगा)
+// इसलिए अभी के लिए मैन्युअल लिस्ट सबसे अच्छी और भरोसेमंद तरीका है
+
+const pages = [
+   
+    { file: "student.html", name: "student" },
+    { file: "teacher.html", name: "teacher" },
+    { file: "reports.html", name: "Reports" },
+   
+    // नई फाइल बनाओ तो बस यहाँ नाम और फाइलनेम डाल देना ↑
+];
+
+const sidebar = document.getElementById('sidebar-links');
+const iframe = document.getElementById('contentFrame');
+
+// साइडबार में लिंक बनाना
+pages.forEach(page => {
+    const link = document.createElement('a');
+    link.href = "#";
+    link.innerHTML = `<span>${page.name}</span>`;
+    link.dataset.file = page.file;
+
+    // क्लिक करने पर आईफ्रेम लोड करो
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // पहले active क्लास हटाओ
+        document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+        // इस पर एक्टिव करो
+        this.classList.add('active');
+        
+        iframe.src = page.file;
+    });
+
+    // अगर ये डिफॉल्ट होम पेज है तो पहले से एक्टिव रखो
+    if (page.file === "index.html") {
+        link.classList.add('active');
+    }
+
+    sidebar.appendChild(link);
+});
+
+// बहुत सारे पेज हैं तो स्क्रॉल करने दो
+sidebar.scrollTop = 0;
+
+// डिफॉल्ट रूप से होम/इंडेक्स लोड रहे हैं पहले से
+</script>
+</body>
+</html>

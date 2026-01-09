@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Admission Portal</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); color: #333; padding: 20px; min-height: 100vh; }
+.container { max-width: 1200px; margin: 0 auto; }
+
+/* View Tabs */
+.view-tabs { 
+  display: flex; 
+  margin-bottom: 25px; 
+  background: white; 
+  border-radius: 12px; 
+  overflow: hidden; 
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08); 
+}
+.view-tab { 
+  flex: 1; 
+  padding: 18px 20px; 
+  text-align: center; 
+  cursor: pointer; 
+  font-weight: 600; 
+  font-size: 1.1rem; 
+  transition: all 0.3s; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 10px; 
+}
+.view-tab:hover { 
+  background: #f8fafc; 
+}
+.view-tab.active { 
+  background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%); 
+  color: white; 
+}
+.view-tab i { 
+  font-size: 1.2rem; 
+}
+
+/* Header */
+.header { 
+  text-align: center; 
+  margin-bottom: 30px; 
+  padding: 20px; 
+  background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%); 
+  color: white; 
+  border-radius: 12px; 
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+  position: relative; 
+}
+h1 { font-size: 2.2rem; margin-bottom: 10px; }
+
+/* Class Selector Dropdown */
+.class-selector-container { 
+  position: absolute; 
+  top: 20px; 
+  right: 20px; 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+}
+.class-selector-label { 
+  font-size: 0.9rem; 
+  color: rgba(255,255,255,0.9); 
+}
+.class-dropdown { 
+  padding: 8px 15px; 
+  border: 2px solid rgba(255,255,255,0.3); 
+  border-radius: 8px; 
+  background: rgba(255,255,255,0.15); 
+  color: white; 
+  font-weight: 600; 
+  cursor: pointer; 
+  min-width: 120px; 
+}
+.class-dropdown option { 
+  background: #1e3c72; 
+  color: white; 
+}
+
+/* Stats Bar */
+.stats-bar { 
+  display: flex; 
+  justify-content: center; 
+  gap: 20px; 
+  margin-top: 20px; 
+  flex-wrap: wrap; 
+}
+.stat-item { 
+  background: rgba(255,255,255,0.15); 
+  padding: 8px 16px; 
+  border-radius: 50px; 
+  font-weight: 500; 
+}
+
+/* Classes Grid */
+.classes-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+  gap: 20px; 
+  margin-bottom: 30px; 
+}
+.class-card { 
+  background: white; 
+  border-radius: 12px; 
+  overflow: hidden; 
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08); 
+  transition: 0.3s; 
+  border-top: 5px solid #4a6bff; 
+}
+.class-card:hover { 
+  transform: translateY(-5px); 
+}
+.class-header { 
+  background: #f8fafc; 
+  padding: 15px; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+}
+.class-name { 
+  font-size: 1.5rem; 
+  font-weight: 700; 
+  color: #1e293b; 
+}
+.class-fee { 
+  font-size: 1.3rem; 
+  font-weight: 700; 
+  color: #10b981; 
+  background: #d1fae5; 
+  padding: 5px 12px; 
+  border-radius: 50px; 
+}
+.class-details { 
+  padding: 20px; 
+}
+.detail-row { 
+  display: flex; 
+  justify-content: space-between; 
+  margin-bottom: 12px; 
+  padding-bottom: 12px; 
+  border-bottom: 1px dashed #e2e8f0; 
+}
+.detail-label { 
+  color: #64748b; 
+}
+.detail-value { 
+  font-weight: 600; 
+  color: #1e293b; 
+}
+.available-seat { 
+  color: #10b981; 
+}
+.confirm-waiting { 
+  color: #3b82f6; 
+}
+.normal-waiting { 
+  color: #f59e0b; 
+}
+
+/* Action Buttons */
+.action-buttons { 
+  display: grid; 
+  gap: 10px; 
+  margin-top: 20px; 
+}
+.btn { 
+  padding: 12px; 
+  border: none; 
+  border-radius: 8px; 
+  font-weight: 600; 
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 8px; 
+  transition: 0.3s; 
+}
+.btn-available { 
+  background: linear-gradient(90deg, #10b981, #34d399); 
+  color: white; 
+}
+.btn-confirm-wait { 
+  background: linear-gradient(90deg, #3b82f6, #60a5fa); 
+  color: white; 
+}
+.btn-normal-wait { 
+  background: linear-gradient(90deg, #f59e0b, #fbbf24); 
+  color: white; 
+}
+.btn-disabled { 
+  background: #cbd5e1; 
+  color: #64748b; 
+  cursor: not-allowed; 
+}
+
+/* Teacher Edit Buttons */
+.teacher-actions { 
+  display: grid; 
+  gap: 10px; 
+  margin-top: 20px; 
+}
+.edit-btn { 
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa); 
+  color: white; 
+  padding: 10px; 
+  border: none; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 8px; 
+  font-weight: 600; 
+  transition: 0.3s; 
+}
+.edit-btn:hover { 
+  background: linear-gradient(90deg, #7c3aed, #8b5cf6); 
+}
+.remove-btn { 
+  background: linear-gradient(90deg, #dc2626, #ef4444); 
+  color: white; 
+  padding: 10px; 
+  border: none; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 8px; 
+  font-weight: 600; 
+  transition: 0.3s; 
+}
+.remove-btn:hover { 
+  background: linear-gradient(90deg, #b91c1c, #dc2626); 
+}
+
+/* Students Display Panel */
+.students-panel { 
+  background: white; 
+  border-radius: 12px; 
+  padding: 25px; 
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08); 
+  margin-bottom: 30px; 
+  display: none; 
+}
+.panel-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 20px; 
+  padding-bottom: 15px; 
+  border-bottom: 2px solid #e2e8f0; 
+}
+.panel-title { 
+  font-size: 1.8rem; 
+  font-weight: 700; 
+  color: #1e293b; 
+}
+.close-panel { 
+  font-size: 1.8rem; 
+  color: #64748b; 
+  cursor: pointer; 
+  padding: 5px; 
+}
+.students-stats { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 15px; 
+  margin-bottom: 25px; 
+}
+.stat-card { 
+  background: #f8fafc; 
+  padding: 15px; 
+  border-radius: 10px; 
+  text-align: center; 
+  border-left: 4px solid #4a6bff; 
+}
+.stat-value { 
+  font-size: 1.8rem; 
+  font-weight: 700; 
+  color: #1e293b; 
+  margin: 5px 0; 
+}
+.stat-label { 
+  color: #64748b; 
+  font-size: 0.9rem; 
+}
+.students-list { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+  gap: 15px; 
+  margin-top: 20px; 
+}
+.student-item { 
+  background: #f8fafc; 
+  padding: 15px; 
+  border-radius: 10px; 
+  border-left: 4px solid #10b981; 
+  position: relative; 
+}
+.student-item.waiting { 
+  border-left-color: #3b82f6; 
+}
+.student-name { 
+  font-weight: 600; 
+  color: #1e293b; 
+  font-size: 1.1rem; 
+  margin-bottom: 5px; 
+}
+.student-info { 
+  color: #64748b; 
+  font-size: 0.9rem; 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  margin-top: 5px; 
+}
+
+/* Teacher Edit Controls on Student Items */
+.student-edit-controls { 
+  position: absolute; 
+  top: 10px; 
+  right: 10px; 
+  display: flex; 
+  gap: 5px; 
+}
+.edit-student-btn, .remove-student-btn { 
+  background: none; 
+  border: none; 
+  cursor: pointer; 
+  padding: 5px; 
+  border-radius: 4px; 
+  font-size: 0.9rem; 
+}
+.edit-student-btn { 
+  color: #3b82f6; 
+  background: #dbeafe; 
+}
+.remove-student-btn { 
+  color: #dc2626; 
+  background: #fee2e2; 
+}
+.edit-student-btn:hover { 
+  background: #bfdbfe; 
+}
+.remove-student-btn:hover { 
+  background: #fecaca; 
+}
+
+/* Empty State */
+.empty-state { 
+  text-align: center; 
+  padding: 40px 20px; 
+  color: #64748b; 
+  grid-column: 1 / -1; 
+}
+.empty-state i { 
+  font-size: 3rem; 
+  color: #cbd5e1; 
+  margin-bottom: 15px; 
+}
+
+/* Modal */
+.modal { 
+  display: none; 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background: rgba(0,0,0,0.7); 
+  justify-content: center; 
+  align-items: center; 
+  z-index: 1000; 
+}
+.modal-content { 
+  background: white; 
+  padding: 25px; 
+  border-radius: 15px; 
+  width: 90%; 
+  max-width: 500px; 
+  max-height: 90vh; 
+  overflow-y: auto; 
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3); 
+}
+.modal-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 20px; 
+}
+.modal-title { 
+  font-size: 1.5rem; 
+  font-weight: 700; 
+  color: #1e293b; 
+}
+.close-modal { 
+  font-size: 1.8rem; 
+  color: #64748b; 
+  cursor: pointer; 
+}
+.modal-body { 
+  margin-bottom: 25px; 
+  line-height: 1.6; 
+}
+.modal-highlight { 
+  background: #f1f5f9; 
+  padding: 15px; 
+  border-radius: 10px; 
+  margin: 15px 0; 
+  text-align: center; 
+  font-weight: 700; 
+}
+.modal-actions { 
+  display: flex; 
+  gap: 10px; 
+  justify-content: flex-end; 
+}
+.modal-btn { 
+  padding: 10px 20px; 
+  border-radius: 8px; 
+  border: none; 
+  font-weight: 600; 
+  cursor: pointer; 
+}
+.modal-btn-primary { 
+  background: #3b82f6; 
+  color: white; 
+}
+.modal-btn-secondary { 
+  background: #e2e8f0; 
+  color: #475569; 
+}
+
+/* Form Inputs */
+.input-group { 
+  margin: 15px 0; 
+}
+.input-label { 
+  display: block; 
+  margin-bottom: 8px; 
+  font-weight: 500; 
+  color: #475569; 
+}
+.input-field { 
+  width: 100%; 
+  padding: 12px; 
+  border: 2px solid #cbd5e1; 
+  border-radius: 8px; 
+  font-size: 1rem; 
+}
+.input-field:focus { 
+  outline: none; 
+  border-color: #3b82f6; 
+}
+.input-error { 
+  color: #dc2626; 
+  font-size: 0.9rem; 
+  margin-top: 5px; 
+  display: none; 
+}
+
+/* Teacher Edit Form */
+.edit-form-grid { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 15px; 
+  margin: 20px 0; 
+}
+
+/* Footer */
+.footer { 
+  text-align: center; 
+  padding: 20px; 
+  color: #64748b; 
+  font-size: 0.9rem; 
+  margin-top: 30px; 
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .classes-grid { 
+    grid-template-columns: 1fr; 
+  }
+  .students-list { 
+    grid-template-columns: 1fr; 
+  }
+  .stats-bar { 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 10px; 
+  }
+  h1 { 
+    font-size: 1.8rem; 
+  }
+  .class-selector-container { 
+    position: static; 
+    justify-content: center; 
+    margin-top: 15px; 
+  }
+  .students-stats { 
+    grid-template-columns: 1fr; 
+  }
+  .view-tabs { 
+    flex-direction: column; 
+  }
+  .edit-form-grid { 
+    grid-template-columns: 1fr; 
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- View Tabs -->
+  <div class="view-tabs">
+    <div class="view-tab active" id="studentTab" onclick="switchView('student')">
+      <i class="fas fa-user-graduate"></i> Student View
+    </div>
+    <div class="view-tab" id="teacherTab" onclick="switchView('teacher')">
+      <i class="fas fa-chalkboard-teacher"></i> Teacher/Admin View
+    </div>
+  </div>
+  
+  <header class="header">
+    <h1><i class="fas fa-graduation-cap"></i> School Admission Portal</h1>
+    <p id="viewDescription">Secure your child's future with our streamlined admission process</p>
+    
+    <!-- Class Selector Dropdown -->
+    <div class="class-selector-container">
+      <span class="class-selector-label"><i class="fas fa-eye"></i> View Students of:</span>
+      <select id="classSelect" class="class-dropdown">
+        <option value="">-- Select Class --</option>
+        <option value="5">Class 5</option>
+        <option value="6">Class 6</option>
+        <option value="7">Class 7</option>
+        <option value="8">Class 8</option>
+        <option value="9">Class 9</option>
+        <option value="10">Class 10</option>
+      </select>
+    </div>
+    
+    <div class="stats-bar">
+      <div class="stat-item"><i class="fas fa-chalkboard-teacher"></i> 6 Classes</div>
+      <div class="stat-item"><i class="fas fa-user-check"></i> 2 Payment Options</div>
+      <div class="stat-item"><i class="fas fa-clock"></i> Real-time Updates</div>
+    </div>
+  </header>
+  
+  <!-- Main Classes Grid -->
+  <div id="classes" class="classes-grid"></div>
+  
+  <!-- Students Display Panel -->
+  <div id="studentsPanel" class="students-panel">
+    <div class="panel-header">
+      <h2 class="panel-title" id="panelClassName">Class 5 Students</h2>
+      <span class="close-panel" id="closePanel">&times;</span>
+    </div>
+    
+    <!-- Teacher Add Student Button -->
+    <div id="teacherAddStudentBtn" style="display: none; margin-bottom: 20px;">
+      <button class="edit-btn" onclick="showAddStudentModal()">
+        <i class="fas fa-user-plus"></i> Add New Student
+      </button>
+    </div>
+    
+    <div class="students-stats">
+      <div class="stat-card">
+        <div class="stat-value available-seat" id="totalSeats">0</div>
+        <div class="stat-label">Total Seats</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="availableSeats">0</div>
+        <div class="stat-label">Available Seats</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="filledSeats">0</div>
+        <div class="stat-label">Filled Seats</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value confirm-waiting" id="waitingStudents">0</div>
+        <div class="stat-label">Waiting Students</div>
+      </div>
+    </div>
+    
+    <h3 style="margin: 20px 0 10px 0; color: #1e293b;">
+      <i class="fas fa-user-check"></i> Confirmed Students
+    </h3>
+    <div class="students-list" id="confirmedStudentsList">
+      <!-- Confirmed students will be shown here -->
+    </div>
+    
+    <h3 style="margin: 25px 0 10px 0; color: #1e293b;">
+      <i class="fas fa-clock"></i> Waiting List Students
+    </h3>
+    <div class="students-list" id="waitingStudentsList">
+      <!-- Waiting students will be shown here -->
+    </div>
+  </div>
+  
+  <footer class="footer">
+    <p>© 2023 St. Xavier's High School Admission System | All rights reserved</p>
+    <p>Contact: admissions@school.edu | Phone: +91 98765 43210</p>
+  </footer>
+</div>
+
+<!-- Modal for Admission Actions -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modalTitle">Admission Confirmation</h3>
+      <span class="close-modal" id="closeModal">&times;</span>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- Modal content will be inserted here -->
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-secondary" id="modalCancel">Cancel</button>
+      <button class="modal-btn modal-btn-primary" id="modalConfirm">Proceed</button>
+    </div>
+  </div>
+</div>
+
+<!-- Teacher Edit Class Modal -->
+<div id="editClassModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Edit Class Details</h3>
+      <span class="close-modal" onclick="closeEditClassModal()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="input-group">
+        <label class="input-label">Class Name</label>
+        <input type="text" id="editClassName" class="input-field" placeholder="Class Name">
+      </div>
+      
+      <div class="edit-form-grid">
+        <div class="input-group">
+          <label class="input-label">Annual Fee (₹)</label>
+          <input type="number" id="editClassFee" class="input-field" placeholder="Annual Fee">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Total Seats</label>
+          <input type="number" id="editTotalSeats" class="input-field" placeholder="Total Seats">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Available Seats</label>
+          <input type="number" id="editAvailableSeats" class="input-field" placeholder="Available Seats">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Admission Seats</label>
+          <input type="number" id="editAdmissionSeats" class="input-field" placeholder="Admission Seats">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Confirm Waiting</label>
+          <input type="number" id="editConfirmWaiting" class="input-field" placeholder="Confirm Waiting">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Normal Waiting</label>
+          <input type="number" id="editNormalWaiting" class="input-field" placeholder="Normal Waiting">
+        </div>
+      </div>
+      
+      <div id="editClassError" class="input-error" style="display: none;"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-secondary" onclick="closeEditClassModal()">Cancel</button>
+      <button class="modal-btn modal-btn-primary" onclick="saveClassChanges()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Teacher Add/Edit Student Modal -->
+<div id="editStudentModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="editStudentModalTitle">Add Student</h3>
+      <span class="close-modal" onclick="closeEditStudentModal()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="input-group">
+        <label class="input-label">Student Name</label>
+        <input type="text" id="editStudentName" class="input-field" placeholder="Student Full Name">
+      </div>
+      
+      <div class="edit-form-grid">
+        <div class="input-group">
+          <label class="input-label">Type</label>
+          <select id="editStudentType" class="input-field" onchange="toggleStudentFields()">
+            <option value="confirmed">Confirmed Student</option>
+            <option value="confirmWaiting">Confirm Waiting</option>
+            <option value="normalWaiting">Normal Waiting</option>
+          </select>
+        </div>
+        
+        <div class="input-group" id="seatNumberGroup">
+          <label class="input-label">Seat Number</label>
+          <input type="number" id="editSeatNumber" class="input-field" placeholder="Seat Number">
+        </div>
+        
+        <div class="input-group" id="positionGroup" style="display: none;">
+          <label class="input-label">Position</label>
+          <input type="number" id="editPosition" class="input-field" placeholder="Position">
+        </div>
+        
+        <div class="input-group">
+          <label class="input-label">Date</label>
+          <input type="date" id="editStudentDate" class="input-field">
+        </div>
+        
+        <div class="input-group" id="seatReservedGroup" style="display: none;">
+          <label class="input-label">Seat Reserved</label>
+          <input type="number" id="editSeatReserved" class="input-field" placeholder="Seat Reserved">
+        </div>
+      </div>
+      
+      <div id="editStudentError" class="input-error" style="display: none;"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-secondary" onclick="closeEditStudentModal()">Cancel</button>
+      <button class="modal-btn modal-btn-primary" onclick="saveStudentChanges()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Main data
+let data = [
+  {
+    id: "5", 
+    name: "Class 5", 
+    fee: 5500, 
+    available: 5,
+    confirmWaiting: 3,
+    normalWaiting: 0,
+    totalSeats: 25,
+    admissionSeats: 25
+  },
+  {id: "6", name: "Class 6", fee: 6000, available: 0, confirmWaiting: 0, normalWaiting: 0, totalSeats: 25, admissionSeats: 25},
+  {id: "7", name: "Class 7", fee: 6500, available: 3, confirmWaiting: 0, normalWaiting: 0, totalSeats: 25, admissionSeats: 25},
+  {id: "8", name: "Class 8", fee: 7000, available: 0, confirmWaiting: 0, normalWaiting: 0, totalSeats: 25, admissionSeats: 25},
+  {id: "9", name: "Class 9", fee: 7500, available: 5, confirmWaiting: 0, normalWaiting: 0, totalSeats: 25, admissionSeats: 25},
+  {id: "10", name: "Class 10", fee: 8000, available: 0, confirmWaiting: 0, normalWaiting: 0, totalSeats: 25, admissionSeats: 25}
+];
+
+// Students data
+let studentsData = {
+  "5": {
+    totalSeats: 25,
+    admissionSeats: 25,
+    confirmedStudents: [
+      {name: "Rahul Sharma", seatNo: 1, date: "2023-05-10"},
+      {name: "Priya Patel", seatNo: 2, date: "2023-05-12"},
+      {name: "Amit Kumar", seatNo: 3, date: "2023-05-15"},
+      {name: "Sneha Singh", seatNo: 4, date: "2023-05-16"},
+      {name: "Vikram Mehta", seatNo: 5, date: "2023-05-18"},
+      {name: "Anjali Gupta", seatNo: 6, date: "2023-05-20"},
+      {name: "Rohan Desai", seatNo: 7, date: "2023-05-22"},
+      {name: "Kavita Joshi", seatNo: 8, date: "2023-05-25"},
+      {name: "Deepak Verma", seatNo: 9, date: "2023-05-28"},
+      {name: "Pooja Reddy", seatNo: 10, date: "2023-06-01"},
+      {name: "Arun Nair", seatNo: 11, date: "2023-06-05"},
+      {name: "Neha Choudhary", seatNo: 12, date: "2023-06-08"},
+      {name: "Rajesh Iyer", seatNo: 13, date: "2023-06-10"},
+      {name: "Meera Pillai", seatNo: 14, date: "2023-06-12"},
+      {name: "Sanjay Malhotra", seatNo: 15, date: "2023-06-15"},
+      {name: "Suresh Menon", seatNo: 16, date: "2023-06-18"}
+    ],
+    confirmWaitingStudents: [
+      {name: "Lata Krishnan", position: 1, date: "2023-06-20", seatReserved: 20},
+      {name: "Manoj Bhatia", position: 2, date: "2023-06-22", seatReserved: 21},
+      {name: "Anil Kapoor", position: 3, date: "2023-06-25", seatReserved: 22},
+      {name: "Sunita Rao", position: 4, date: "2023-06-28", seatReserved: 23}
+    ],
+    normalWaitingStudents: []
+  },
+  "6": {
+    totalSeats: 25,
+    admissionSeats: 25,
+    confirmedStudents: [
+      {name: "Karan Johar", seatNo: 1, date: "2023-05-08"},
+      {name: "Simran Kaur", seatNo: 2, date: "2023-05-09"},
+      {name: "Rajat Kapoor", seatNo: 3, date: "2023-05-10"}
+    ],
+    confirmWaitingStudents: [],
+    normalWaitingStudents: []
+  },
+  "7": {
+    totalSeats: 25,
+    admissionSeats: 25,
+    confirmedStudents: [
+      {name: "Aryan Singh", seatNo: 1, date: "2023-05-05"},
+      {name: "Isha Gupta", seatNo: 2, date: "2023-05-06"},
+      {name: "Ravi Kumar", seatNo: 3, date: "2023-05-07"}
+    ],
+    confirmWaitingStudents: [],
+    normalWaitingStudents: []
+  },
+  "8": {
+    totalSeats: 25,
+    admissionSeats: 25,
+    confirmedStudents: [
+      {name: "Varun Dhawan", seatNo: 1, date: "2023-04-28"},
+      {name: "Tanya Sharma", seatNo: 2, date: "2023-04-29"},
+      {name: "Rohit Verma", seatNo: 3, date: "2023-05-01"}
+    ],
+    confirmWaitingStudents: [],
+    normalWaitingStudents: []
+  },
+  "9": {
+    totalSeats: 25,
+    admissionSeats: 25,
+    confirmedStudents: [
+      {name: "Aditya Roy", seatNo: 1, date: "2023-04-25"},
+      {name: "Shivani Kapoor", seatNo: 2, date: "2023-04-26"}
+    ],
+    confirmWaitingStudents: [],
+    normalWaitingStudents: []
+  },
+  "10": {
+    totalSeats: 25,
+    admissionSeats: 25,
+   confirmedStudents: [
+      {name: "Rahul Sharma", seatNo: 1, date: "2023-05-10"},
+      {name: "Priya Patel", seatNo: 2, date: "2023-05-12"},
+      {name: "Amit Kumar", seatNo: 3, date: "2023-05-15"},
+      {name: "Sneha Singh", seatNo: 4, date: "2023-05-16"},
+      {name: "Vikram Mehta", seatNo: 5, date: "2023-05-18"},
+      {name: "Anjali Gupta", seatNo: 6, date: "2023-05-20"},
+      {name: "Rohan Desai", seatNo: 7, date: "2023-05-22"},
+      {name: "Kavita Joshi", seatNo: 8, date: "2023-05-25"},
+      {name: "Deepak Verma", seatNo: 9, date: "2023-05-28"},
+      {name: "Pooja Reddy", seatNo: 10, date: "2023-06-01"},
+      {name: "Arun Nair", seatNo: 11, date: "2023-06-05"},
+      {name: "Neha Choudhary", seatNo: 12, date: "2023-06-08"},
+      {name: "Rajesh Iyer", seatNo: 13, date: "2023-06-10"},
+      {name: "Meera Pillai", seatNo: 14, date: "2023-06-12"},
+      {name: "Sanjay Malhotra", seatNo: 15, date: "2023-06-15"},
+      {name: "Suresh Menon", seatNo: 16, date: "2023-06-18"}
+    ],
+    confirmWaitingStudents: [],
+    normalWaitingStudents: []
+  }
+};
+
+// DOM Elements
+const studentTab = document.getElementById('studentTab');
+const teacherTab = document.getElementById('teacherTab');
+const viewDescription = document.getElementById('viewDescription');
+const classSelect = document.getElementById('classSelect');
+const classesContainer = document.getElementById('classes');
+const studentsPanel = document.getElementById('studentsPanel');
+const panelClassName = document.getElementById('panelClassName');
+const teacherAddStudentBtn = document.getElementById('teacherAddStudentBtn');
+const totalSeatsElem = document.getElementById('totalSeats');
+const availableSeatsElem = document.getElementById('availableSeats');
+const filledSeatsElem = document.getElementById('filledSeats');
+const waitingStudentsElem = document.getElementById('waitingStudents');
+const confirmedStudentsList = document.getElementById('confirmedStudentsList');
+const waitingStudentsList = document.getElementById('waitingStudentsList');
+const closePanel = document.getElementById('closePanel');
+
+// Modal elements
+const modal = document.getElementById("modal");
+const modalTitle = document.getElementById("modalTitle");
+const modalBody = document.getElementById("modalBody");
+const modalConfirm = document.getElementById("modalConfirm");
+const modalCancel = document.getElementById("modalCancel");
+const closeModal = document.getElementById("closeModal");
+
+// Teacher edit modals
+const editClassModal = document.getElementById('editClassModal');
+const editStudentModal = document.getElementById('editStudentModal');
+
+// State variables
+let currentView = 'student';
+let currentAction = null;
+let currentClassIndex = null;
+let currentStudentName = "";
+let currentEditClassId = null;
+let currentEditStudent = null;
+let currentEditStudentClassId = null;
+
+// Initialize
+renderClasses();
+
+// Event Listeners
+classSelect.addEventListener('change', (e) => {
+  const selectedClassId = e.target.value;
+  if (selectedClassId) {
+    showStudentsPanel(selectedClassId);
+  }
+});
+
+closePanel.addEventListener('click', () => {
+  studentsPanel.style.display = 'none';
+  classSelect.value = '';
+});
+
+// Functions
+function switchView(view) {
+  currentView = view;
+  
+  // Update tabs
+  studentTab.classList.toggle('active', view === 'student');
+  teacherTab.classList.toggle('active', view === 'teacher');
+  
+  // Update description
+  if (view === 'student') {
+    viewDescription.textContent = "Secure your child's future with our streamlined admission process";
+  } else {
+    viewDescription.textContent = "Admin panel - Manage classes, students, and admissions";
+  }
+  
+  // Re-render classes
+  renderClasses();
+  
+  // Update students panel if open
+  if (studentsPanel.style.display === 'block') {
+    const selectedClassId = classSelect.value;
+    if (selectedClassId) {
+      showStudentsPanel(selectedClassId);
+    }
+  }
+}
+
+function renderClasses() {
+  classesContainer.innerHTML = "";
+  
+  if (currentView === 'student') {
+    // Student View - Regular admission buttons
+    data.forEach((c, i) => {
+      const classCard = createClassCardForStudent(c, i);
+      classesContainer.appendChild(classCard);
+    });
+  } else {
+    // Teacher View - Edit buttons
+    data.forEach((c, i) => {
+      const classCard = createClassCardForTeacher(c, i);
+      classesContainer.appendChild(classCard);
+    });
+  }
+}
+
+function createClassCardForStudent(c, i) {
+  const classCard = document.createElement("div");
+  classCard.className = "class-card";
+  const canPay = c.available > 0;
+  const canConfirmWait = c.available === 0 && c.confirmWaiting < 4;
+  const canNormalWait = c.available === 0 && c.normalWaiting < 4;
+  
+  classCard.innerHTML = `
+    <div class="class-header">
+      <div class="class-name">${c.name}</div>
+      <div class="class-fee">₹${c.fee}/yr</div>
+    </div>
+    <div class="class-details">
+      <div class="detail-row">
+        <span class="detail-label">Total Capacity:</span>
+        <span class="detail-value">${c.totalSeats} seats</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Available Seats:</span>
+        <span class="detail-value seat-count ${c.available > 0 ? 'available-seat' : ''}">${c.available} / ${c.admissionSeats}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Confirm Waiting:</span>
+        <span class="detail-value confirm-waiting">${c.confirmWaiting} / 4</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Normal Waiting:</span>
+        <span class="detail-value normal-waiting">${c.normalWaiting} / 4</span>
+      </div>
+      <div class="action-buttons">
+        <button class="btn ${canPay ? 'btn-available' : 'btn-disabled'}" ${canPay ? `onclick="showPaySeatModal(${i})"` : ''}>
+          <i class="fas fa-check-circle"></i>Pay & Confirm Seat
+        </button>
+        <button class="btn ${canConfirmWait ? 'btn-confirm-wait' : 'btn-disabled'}" ${canConfirmWait ? `onclick="showConfirmWaitModal(${i})"` : ''}>
+          <i class="fas fa-clock"></i>Confirm Waiting (100% Full Fee)
+        </button>
+        <button class="btn ${canNormalWait ? 'btn-normal-wait' : 'btn-disabled'}" ${canNormalWait ? `onclick="showNormalWaitModal(${i})"` : ''}>
+          <i class="fas fa-list-alt"></i>Apply Normal Waiting
+        </button>
+      </div>
+      ${c.confirmWaiting >= 4 ? `<div style="color:#dc2626; margin-top:10px; display:flex; align-items:center; gap:5px;"><i class="fas fa-exclamation-circle"></i>Confirm Waiting full (max 4)</div>` : ''}
+      ${c.normalWaiting >= 4 ? `<div style="color:#dc2626; margin-top:10px; display:flex; align-items:center; gap:5px;"><i class="fas fa-exclamation-circle"></i>Normal Waiting full (max 4)</div>` : ''}
+    </div>
+  `;
+  return classCard;
+}
+
+function createClassCardForTeacher(c, i) {
+  const classCard = document.createElement("div");
+  classCard.className = "class-card";
+  
+  classCard.innerHTML = `
+    <div class="class-header">
+      <div class="class-name">${c.name}</div>
+      <div class="class-fee">₹${c.fee}/yr</div>
+    </div>
+    <div class="class-details">
+      <div class="detail-row">
+        <span class="detail-label">Total Capacity:</span>
+        <span class="detail-value">${c.totalSeats} seats</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Available Seats:</span>
+        <span class="detail-value seat-count ${c.available > 0 ? 'available-seat' : ''}">${c.available} / ${c.admissionSeats}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Confirm Waiting:</span>
+        <span class="detail-value confirm-waiting">${c.confirmWaiting} / 4</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Normal Waiting:</span>
+        <span class="detail-value normal-waiting">${c.normalWaiting} / 4</span>
+      </div>
+      <div class="teacher-actions">
+        <button class="edit-btn" onclick="showEditClassModal('${c.id}')">
+          <i class="fas fa-edit"></i>Edit Class Details
+        </button>
+        <button class="remove-btn" onclick="deleteClass('${c.id}')">
+          <i class="fas fa-trash"></i>Delete Class
+        </button>
+      </div>
+    </div>
+  `;
+  return classCard;
+}
+
+function showStudentsPanel(classId) {
+  const classData = data.find(c => c.id === classId);
+  const students = studentsData[classId];
+  
+  if (!classData || !students) return;
+  
+  // Update panel title
+  panelClassName.textContent = `${classData.name} Students`;
+  
+  // Show/hide teacher add button
+  if (currentView === 'teacher') {
+    teacherAddStudentBtn.style.display = 'block';
+  } else {
+    teacherAddStudentBtn.style.display = 'none';
+  }
+  
+  // Calculate stats
+  const confirmedCount = students.confirmedStudents.length;
+  const confirmWaitingWithSeats = students.confirmWaitingStudents.filter(s => s.seatReserved).length;
+  const filledSeats = confirmedCount + confirmWaitingWithSeats;
+  const waitingCount = students.confirmWaitingStudents.filter(s => !s.seatReserved).length + students.normalWaitingStudents.length;
+  
+  // Update stats
+  totalSeatsElem.textContent = students.totalSeats;
+  filledSeatsElem.textContent = filledSeats;
+  waitingStudentsElem.textContent = waitingCount;
+  availableSeatsElem.textContent = classData.available;
+  
+  // Style available seats
+  if (classData.available > 0) {
+    availableSeatsElem.style.color = '#10b981';
+  } else {
+    availableSeatsElem.style.color = '#dc2626';
+  }
+  
+  // Combine confirmed and confirm waiting students who have seats
+  const allConfirmedWithSeats = [
+    ...students.confirmedStudents,
+    ...students.confirmWaitingStudents.filter(s => s.seatReserved)
+  ];
+  
+  // Render confirmed students
+  renderStudentsList(confirmedStudentsList, allConfirmedWithSeats, 'confirmed', classId);
+  
+  // Combine waiting lists
+  const allWaiting = [
+    ...students.confirmWaitingStudents.filter(s => !s.seatReserved),
+    ...students.normalWaitingStudents
+  ];
+  
+  // Render waiting students
+  renderStudentsList(waitingStudentsList, allWaiting, 'waiting', classId);
+  
+  // Show panel
+  studentsPanel.style.display = 'block';
+}
+
+function renderStudentsList(container, students, type, classId) {
+  container.innerHTML = '';
+  
+  if (students.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-user${type === 'confirmed' ? '-friends' : '-clock'}"></i>
+        <p>No ${type === 'confirmed' ? 'confirmed' : 'waiting'} students in this class</p>
+      </div>
+    `;
+    return;
+  }
+  
+  // Sort students
+  students.sort((a, b) => {
+    if (type === 'confirmed') {
+      return (a.seatNo || a.seatReserved) - (b.seatNo || b.seatReserved);
+    } else {
+      return a.position - b.position;
+    }
+  });
+  
+  students.forEach((student, index) => {
+    const studentItem = document.createElement('div');
+    studentItem.className = `student-item ${type === 'waiting' ? 'waiting' : ''}`;
+    
+    let html = '';
+    if (type === 'confirmed') {
+      const seatNo = student.seatNo || student.seatReserved;
+      html = `
+        <div class="student-name">${student.name}</div>
+        <div class="student-info">
+          <i class="fas fa-hashtag"></i> Seat Number: <strong>${seatNo}</strong>
+        </div>
+        <div class="student-info">
+          <i class="fas fa-calendar"></i> ${student.seatReserved ? 'Seat Reserved:' : 'Admission Date:'} ${student.date}
+        </div>
+        ${student.seatReserved ? 
+          `<div class="student-info" style="color:#3b82f6;">
+            <i class="fas fa-clock"></i> Confirm Waiting - Seat Reserved
+          </div>` 
+          : ''}
+      `;
+    } else {
+      html = `
+        <div class="student-name">${student.name}</div>
+        <div class="student-info">
+          <i class="fas fa-list-ol"></i> Position: <strong>${student.position}</strong>
+        </div>
+        <div class="student-info">
+          <i class="fas fa-calendar"></i> Applied Date: ${student.date}
+        </div>
+        <div class="student-info">
+          <i class="fas fa-clock"></i> Status: Waiting for seat availability
+        </div>
+      `;
+    }
+    
+    // Add edit/remove buttons for teacher view
+    if (currentView === 'teacher') {
+      html += `
+        <div class="student-edit-controls">
+          <button class="edit-student-btn" onclick="editStudent('${classId}', '${type}', ${index})">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="remove-student-btn" onclick="removeStudent('${classId}', '${type}', ${index})">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      `;
+    }
+    
+    studentItem.innerHTML = html;
+    container.appendChild(studentItem);
+  });
+}
+
+// Admission Functions (Student View)
+function getNextAdmissionSeatNumber(classId) {
+  const students = studentsData[classId];
+  const classData = data.find(c => c.id === classId);
+  
+  if (!students || !classData) return null;
+  
+  const usedSeatNumbers = [
+    ...students.confirmedStudents.map(s => s.seatNo),
+    ...students.confirmWaitingStudents.map(s => s.seatReserved).filter(s => s)
+  ];
+  
+  for (let seat = 1; seat <= classData.admissionSeats; seat++) {
+    if (!usedSeatNumbers.includes(seat)) {
+      return seat;
+    }
+  }
+  
+  return null;
+}
+
+function getNextReservedSeatNumber(classId) {
+  const students = studentsData[classId];
+  const classData = data.find(c => c.id === classId);
+  
+  if (!students || !classData) return null;
+  
+  const usedSeatNumbers = [
+    ...students.confirmedStudents.map(s => s.seatNo),
+    ...students.confirmWaitingStudents.map(s => s.seatReserved).filter(s => s)
+  ];
+  
+  for (let seat = classData.admissionSeats + 1; seat <= classData.totalSeats; seat++) {
+    if (!usedSeatNumbers.includes(seat)) {
+      return seat;
+    }
+  }
+  
+  return null;
+}
+
+// Modal Functions (Student View)
+function showPaySeatModal(i) {
+  const c = data[i];
+  currentClassIndex = i;
+  currentAction = 'paySeat';
+  const monthlyInstallment = Math.ceil(c.fee / 10);
+  
+  const nextSeatNumber = getNextAdmissionSeatNumber(c.id);
+  
+  if (!nextSeatNumber) {
+    alert(`No admission seats available in ${c.name}. All ${c.admissionSeats} admission seats are filled.`);
+    return;
+  }
+  
+  modalTitle.textContent = "Confirm Seat Payment";
+  modalBody.innerHTML = `
+    <p>You are about to confirm a seat in <strong>${c.name}</strong>.</p>
+    <p>Annual fee: <strong>₹${c.fee}</strong></p>
+    <div class="modal-highlight">Seat Number: ${nextSeatNumber} (Admission Seat)</div>
+    
+    <div class="input-group">
+      <label class="input-label" for="studentNameInput">
+        <i class="fas fa-user"></i> Student Full Name
+      </label>
+      <input type="text" id="studentNameInput" class="input-field" placeholder="Enter student's full name">
+      <div id="nameError" class="input-error">
+        <i class="fas fa-exclamation-circle"></i> Please enter student name
+      </div>
+    </div>
+    
+    <p><strong>Choose payment plan:</strong></p>
+    <ul style="margin-left:20px; margin-top:10px;">
+      <li><strong>Yearly:</strong> ₹${c.fee} (One-time payment)</li>
+      <li><strong>Monthly:</strong> ₹${monthlyInstallment} (10 monthly installments)</li>
+    </ul>
+    <p style="margin-top:10px; color:#666; font-size:0.9rem;">
+      <i class="fas fa-info-circle"></i> Note: Class has ${c.totalSeats} total seats, ${c.admissionSeats} for admission
+    </p>
+  `;
+  
+  modalConfirm.textContent = "Proceed to Payment";
+  modal.style.display = "flex";
+  
+  setTimeout(() => {
+    document.getElementById('studentNameInput').value = '';
+    document.getElementById('studentNameInput').focus();
+    document.getElementById('nameError').style.display = 'none';
+  }, 100);
+}
+
+function showConfirmWaitModal(i) {
+  const c = data[i];
+  currentClassIndex = i;
+  currentAction = 'confirmWait';
+  
+  const admissionSeatAvailable = getNextAdmissionSeatNumber(c.id) !== null;
+  const nextReservedSeat = getNextReservedSeatNumber(c.id);
+  
+  modalTitle.textContent = "Confirm Waiting List";
+  modalBody.innerHTML = `
+    <p>Joining <strong>Confirm Waiting List</strong> for ${c.name}.</p>
+    <p><strong style="color:#dc2626; font-size:1.1rem;">100% Full Fee Payment: ₹${c.fee} (One-time)</strong></p>
+    
+    ${admissionSeatAvailable ? 
+      `<div class="modal-highlight">
+         Your Position: ${c.confirmWaiting + 1} / 4<br>
+         Seat Number: ${getNextAdmissionSeatNumber(c.id)} (Admission Seat)
+       </div>
+       <div style="background:#dcfce7; padding:12px; border-radius:8px; margin:10px 0;">
+         <i class="fas fa-check-circle" style="color:#10b981;"></i> 
+         <strong>Admission Seat Available!</strong> Seat will be assigned immediately from admission seats.
+       </div>` 
+      : 
+      nextReservedSeat ?
+      `<div class="modal-highlight">
+         Your Position: ${c.confirmWaiting + 1} / 4<br>
+         Seat Number: ${nextReservedSeat} (Reserved Seat)
+       </div>
+       <div style="background:#dbeafe; padding:12px; border-radius:8px; margin:10px 0;">
+         <i class="fas fa-clock" style="color:#3b82f6;"></i> 
+         <strong>Reserved Seat:</strong> Seat ${nextReservedSeat} reserved for you.
+       </div>`
+      :
+      `<div class="modal-highlight">
+         Your Position: ${c.confirmWaiting + 1} / 4<br>
+         Waiting for Seat
+       </div>
+       <div style="background:#fef3c7; padding:12px; border-radius:8px; margin:10px 0;">
+         <i class="fas fa-info-circle" style="color:#f59e0b;"></i> 
+         <strong>Waiting List:</strong> All seats are currently filled. You'll get seat when available.
+       </div>`
+    }
+    
+    <div class="input-group">
+      <label class="input-label" for="studentNameInput">
+        <i class="fas fa-user"></i> Student Full Name
+      </label>
+      <input type="text" id="studentNameInput" class="input-field" placeholder="Enter student's full name">
+      <div id="nameError" class="input-error">
+        <i class="fas fa-exclamation-circle"></i> Please enter student name
+      </div>
+    </div>
+    
+    <p><strong>Important Terms:</strong></p>
+    <ul style="margin-left:20px; margin-top:10px;">
+      <li><strong>100% full fee ₹${c.fee} must be paid immediately</strong></li>
+      <li><strong>Monthly installment option NOT available</strong></li>
+      <li><strong>Priority over normal waiting list</strong></li>
+      ${admissionSeatAvailable ? 
+        `<li><strong>Seat assigned from available admission seats</strong></li>` 
+        : nextReservedSeat ?
+        `<li><strong>Seat ${nextReservedSeat} reserved for you</strong></li>`
+        :
+        `<li><strong>Seat will be assigned when available</strong></li>`
+      }
+      <li>Class starts on scheduled date</li>
+      <li>100% refund if seat not available in 30 days</li>
+    </ul>
+    ${c.confirmWaiting >= 4 ? `<div style="color:#dc2626; background:#fef3c7; padding:10px; border-radius:8px; margin-top:15px;"><i class="fas fa-exclamation-circle"></i> Confirm Waiting list is full!</div>` : ''}
+  `;
+  
+  const seatNumber = admissionSeatAvailable ? getNextAdmissionSeatNumber(c.id) : nextReservedSeat;
+  modalConfirm.textContent = seatNumber ? `Pay ₹${c.fee} & Get Seat ${seatNumber}` : `Pay ₹${c.fee} & Join Waiting`;
+  modalConfirm.disabled = c.confirmWaiting >= 4;
+  modal.style.display = "flex";
+  
+  setTimeout(() => {
+    document.getElementById('studentNameInput').value = '';
+    document.getElementById('studentNameInput').focus();
+    document.getElementById('nameError').style.display = 'none';
+  }, 100);
+}
+
+function showNormalWaitModal(i) {
+  const c = data[i];
+  currentClassIndex = i;
+  currentAction = 'normalWait';
+  
+  modalTitle.textContent = "Normal Waiting List";
+  modalBody.innerHTML = `
+    <p>Applying for <strong>Normal Waiting List</strong> for ${c.name}.</p>
+    <p>No payment required.</p>
+    <div class="modal-highlight">Your Position: ${c.normalWaiting + 1} / 4</div>
+    
+    <div class="input-group">
+      <label class="input-label" for="studentNameInput">
+        <i class="fas fa-user"></i> Student Full Name
+      </label>
+      <input type="text" id="studentNameInput" class="input-field" placeholder="Enter student's full name">
+      <div id="nameError" class="input-error">
+        <i class="fas fa-exclamation-circle"></i> Please enter student name
+      </div>
+    </div>
+    
+    <p>How it works:</p>
+    <ul style="margin-left:20px; margin-top:10px;">
+      <li>Free to join, no commitment</li>
+      <li>Seats offered based on queue position</li>
+      <li>48 hours to confirm when contacted</li>
+      <li>If selected, pay full fee within 48 hours</li>
+      <li>Seat number assigned from available seats</li>
+    </ul>
+    ${c.normalWaiting >= 4 ? `<div style="color:#dc2626; background:#fef3c7; padding:10px; border-radius:8px; margin-top:15px;"><i class="fas fa-exclamation-circle"></i> Normal Waiting list is full!</div>` : ''}
+  `;
+  
+  modalConfirm.textContent = "Join Waiting List";
+  modalConfirm.disabled = c.normalWaiting >= 4;
+  modal.style.display = "flex";
+  
+  setTimeout(() => {
+    document.getElementById('studentNameInput').value = '';
+    document.getElementById('studentNameInput').focus();
+    document.getElementById('nameError').style.display = 'none';
+  }, 100);
+}
+
+function executeAction() {
+  const studentNameInput = document.getElementById('studentNameInput');
+  const nameError = document.getElementById('nameError');
+  
+  if (!studentNameInput || !studentNameInput.value.trim()) {
+    nameError.style.display = 'block';
+    studentNameInput.focus();
+    return;
+  }
+  
+  currentStudentName = studentNameInput.value.trim();
+  
+  const c = data[currentClassIndex];
+  const students = studentsData[c.id];
+  
+  switch(currentAction) {
+    case 'paySeat':
+      if (c.available > 0) {
+        const assignedSeatNo = getNextAdmissionSeatNumber(c.id);
+        if (!assignedSeatNo) {
+          alert("No admission seats available!");
+          closeModalFunc();
+          return;
+        }
+        
+        c.available--;
+        
+        if (students) {
+          students.confirmedStudents.push({
+            name: currentStudentName,
+            seatNo: assignedSeatNo,
+            date: new Date().toISOString().split('T')[0]
+          });
+          
+          students.confirmedStudents.sort((a, b) => a.seatNo - b.seatNo);
+        }
+        
+        modalTitle.textContent = "Success!";
+        modalBody.innerHTML = `
+          <div style="text-align:center; padding:20px;">
+            <i class="fas fa-check-circle" style="font-size:3rem; color:#10b981;"></i>
+            <h3 style="margin:15px 0; color:#10b981;">Seat Confirmed!</h3>
+            <p><strong>${c.name}</strong><br>
+            Student: <strong>${currentStudentName}</strong><br>
+            Seat Number: <strong style="font-size:1.5rem; color:#1e3c72;">${assignedSeatNo}</strong> (Admission Seat)<br>
+            Annual Fee: ₹${c.fee}<br><br>
+            Payment options sent to your email.</p>
+          </div>
+        `;
+        modalConfirm.textContent = "Done";
+        modalCancel.style.display = "none";
+        modalConfirm.onclick = closeModalFunc;
+      }
+      break;
+      
+    case 'confirmWait':
+      if (c.confirmWaiting < 4) {
+        const newPos = c.confirmWaiting + 1;
+        
+        const admissionSeat = getNextAdmissionSeatNumber(c.id);
+        const reservedSeat = getNextReservedSeatNumber(c.id);
+        
+        let assignedSeatNo = null;
+        let seatType = '';
+        
+        if (admissionSeat) {
+          assignedSeatNo = admissionSeat;
+          seatType = 'Admission Seat';
+          c.available = Math.max(0, c.available - 1);
+        } else if (reservedSeat) {
+          assignedSeatNo = reservedSeat;
+          seatType = 'Reserved Seat';
+        }
+        
+        const waitingStudent = {
+          name: currentStudentName,
+          position: newPos,
+          date: new Date().toISOString().split('T')[0],
+          type: 'confirm'
+        };
+        
+        if (assignedSeatNo) {
+          waitingStudent.seatReserved = assignedSeatNo;
+        }
+        
+        if (students) {
+          students.confirmWaitingStudents.push(waitingStudent);
+        }
+        
+        c.confirmWaiting++;
+        
+        if (assignedSeatNo) {
+          modalTitle.textContent = "Success!";
+          modalBody.innerHTML = `
+            <div style="text-align:center; padding:20px;">
+              <i class="fas fa-check-circle" style="font-size:3rem; color:#3b82f6;"></i>
+              <h3 style="margin:15px 0; color:#3b82f6;">Seat Confirmed!</h3>
+              <p><strong>${c.name}</strong><br>
+              Student: <strong>${currentStudentName}</strong><br>
+              <div style="background:#dbeafe; padding:15px; border-radius:10px; margin:15px 0;">
+                <strong style="font-size:1.3rem;">Seat Number: ${assignedSeatNo}</strong><br>
+                ${seatType}<br>
+                Position: ${newPos}/4 (Confirm Waiting List)
+              </div>
+              <strong>Amount Paid: ₹${c.fee} (100% Full Fee)</strong><br><br>
+              <div style="background:#dcfce7; padding:12px; border-radius:8px; margin:10px 0;">
+                <i class="fas fa-check"></i> <strong>Seat ${seatType === 'Admission Seat' ? 'assigned' : 'reserved'} immediately!</strong>
+              </div>
+              Admission details sent to your email.</p>
+            </div>
+          `;
+        } else {
+          modalTitle.textContent = "Success!";
+          modalBody.innerHTML = `
+            <div style="text-align:center; padding:20px;">
+              <i class="fas fa-clock" style="font-size:3rem; color:#3b82f6;"></i>
+              <h3 style="margin:15px 0; color:#3b82f6;">Added to Confirm Waiting List!</h3>
+              <p><strong>${c.name}</strong><br>
+              Student: <strong>${currentStudentName}</strong><br>
+              <div style="background:#dbeafe; padding:15px; border-radius:10px; margin:15px 0;">
+                <strong style="font-size:1.3rem;">Position: ${newPos}/4</strong><br>
+                Confirm Waiting List
+              </div>
+              <strong>Amount Paid: ₹${c.fee} (100% Full Fee)</strong><br><br>
+              <div style="background:#fef3c7; padding:12px; border-radius:8px; margin:10px 0;">
+                <i class="fas fa-info-circle"></i> <strong>Waiting for seat:</strong><br>
+                All seats are currently filled. You'll get seat when available.
+              </div>
+              Admission details sent to your email.</p>
+            </div>
+          `;
+        }
+        
+        modalConfirm.textContent = "Done";
+        modalCancel.style.display = "none";
+        modalConfirm.onclick = closeModalFunc;
+      }
+      break;
+      
+    case 'normalWait':
+      if (c.normalWaiting < 4) {
+        const newPos = c.normalWaiting + 1;
+        c.normalWaiting++;
+        
+        if (students) {
+          students.normalWaitingStudents.push({
+            name: currentStudentName,
+            position: newPos,
+            date: new Date().toISOString().split('T')[0],
+            type: 'normal'
+          });
+        }
+        
+        modalTitle.textContent = "Success!";
+        modalBody.innerHTML = `
+          <div style="text-align:center; padding:20px;">
+            <i class="fas fa-list-alt" style="font-size:3rem; color:#f59e0b;"></i>
+            <h3 style="margin:15px 0; color:#f59e0b;">Added to Waiting List!</h3>
+            <p><strong>${c.name}</strong><br>
+            Student: <strong>${currentStudentName}</strong><br>
+            Position: ${newPos}/4<br><br>
+            <div style="background:#fef3c7; padding:15px; border-radius:10px; margin:15px 0;">
+              <i class="fas fa-info-circle"></i> <strong>Note:</strong><br>
+              Seat number will be assigned from available seats when contacted.
+            </div>
+            We'll contact you when seat available.</p>
+          </div>
+        `;
+        modalConfirm.textContent = "Done";
+        modalCancel.style.display = "none";
+        modalConfirm.onclick = closeModalFunc;
+      }
+      break;
+  }
+  renderClasses();
+  
+  // Update students panel if open
+  if (studentsPanel.style.display === 'block') {
+    const selectedClassId = classSelect.value;
+    if (selectedClassId) {
+      showStudentsPanel(selectedClassId);
+    }
+  }
+}
+
+// Teacher Functions
+function showEditClassModal(classId) {
+  const classData = data.find(c => c.id === classId);
+  if (!classData) return;
+  
+  currentEditClassId = classId;
+  
+  document.getElementById('editClassName').value = classData.name;
+  document.getElementById('editClassFee').value = classData.fee;
+  document.getElementById('editTotalSeats').value = classData.totalSeats;
+  document.getElementById('editAvailableSeats').value = classData.available;
+  document.getElementById('editAdmissionSeats').value = classData.admissionSeats;
+  document.getElementById('editConfirmWaiting').value = classData.confirmWaiting;
+  document.getElementById('editNormalWaiting').value = classData.normalWaiting;
+  
+  document.getElementById('editClassError').style.display = 'none';
+  editClassModal.style.display = 'flex';
+}
+
+function closeEditClassModal() {
+  editClassModal.style.display = 'none';
+  currentEditClassId = null;
+}
+
+function saveClassChanges() {
+  const classData = data.find(c => c.id === currentEditClassId);
+  if (!classData) return;
+  
+  const name = document.getElementById('editClassName').value;
+  const fee = parseInt(document.getElementById('editClassFee').value);
+  const totalSeats = parseInt(document.getElementById('editTotalSeats').value);
+  const available = parseInt(document.getElementById('editAvailableSeats').value);
+  const admissionSeats = parseInt(document.getElementById('editAdmissionSeats').value);
+  const confirmWaiting = parseInt(document.getElementById('editConfirmWaiting').value);
+  const normalWaiting = parseInt(document.getElementById('editNormalWaiting').value);
+  
+  // Validation
+  const errorDiv = document.getElementById('editClassError');
+  if (!name || fee < 0 || totalSeats < 1 || available < 0 || admissionSeats < 0 || confirmWaiting < 0 || normalWaiting < 0) {
+    errorDiv.textContent = "Please enter valid values. All numbers must be non-negative.";
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  if (admissionSeats > totalSeats) {
+    errorDiv.textContent = "Admission seats cannot be more than total seats.";
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  if (available > admissionSeats) {
+    errorDiv.textContent = "Available seats cannot be more than admission seats.";
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  // Update class data
+  classData.name = name;
+  classData.fee = fee;
+  classData.totalSeats = totalSeats;
+  classData.available = available;
+  classData.admissionSeats = admissionSeats;
+  classData.confirmWaiting = confirmWaiting;
+  classData.normalWaiting = normalWaiting;
+  
+  // Update students data
+  if (studentsData[currentEditClassId]) {
+    studentsData[currentEditClassId].totalSeats = totalSeats;
+    studentsData[currentEditClassId].admissionSeats = admissionSeats;
+  }
+  
+  // Re-render
+  renderClasses();
+  
+  // Update students panel if open
+  if (studentsPanel.style.display === 'block' && classSelect.value === currentEditClassId) {
+    showStudentsPanel(currentEditClassId);
+  }
+  
+  closeEditClassModal();
+  alert("Class details updated successfully!");
+}
+
+function deleteClass(classId) {
+  if (!confirm(`Are you sure you want to delete ${classId}? This will also delete all student records for this class.`)) {
+    return;
+  }
+  
+  // Remove from data array
+  const index = data.findIndex(c => c.id === classId);
+  if (index !== -1) {
+    data.splice(index, 1);
+  }
+  
+  // Remove from students data
+  delete studentsData[classId];
+  
+  // Re-render
+  renderClasses();
+  
+  // Close panel if it was showing this class
+  if (studentsPanel.style.display === 'block' && classSelect.value === classId) {
+    studentsPanel.style.display = 'none';
+    classSelect.value = '';
+  }
+  
+  alert("Class deleted successfully!");
+}
+
+function showAddStudentModal() {
+  const classId = classSelect.value;
+  if (!classId) {
+    alert("Please select a class first.");
+    return;
+  }
+  
+  currentEditStudent = null;
+  currentEditStudentClassId = classId;
+  
+  document.getElementById('editStudentModalTitle').textContent = "Add New Student";
+  document.getElementById('editStudentName').value = '';
+  document.getElementById('editStudentType').value = 'confirmed';
+  document.getElementById('editSeatNumber').value = '';
+  document.getElementById('editPosition').value = '1';
+  document.getElementById('editStudentDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('editSeatReserved').value = '';
+  
+  toggleStudentFields();
+  document.getElementById('editStudentError').style.display = 'none';
+  editStudentModal.style.display = 'flex';
+}
+
+function editStudent(classId, type, index) {
+  const students = studentsData[classId];
+  if (!students) return;
+  
+  let student;
+  if (type === 'confirmed') {
+    student = students.confirmedStudents[index];
+  } else if (type === 'waiting') {
+    // Check if it's confirm waiting or normal waiting
+    const allWaiting = [
+      ...students.confirmWaitingStudents.filter(s => !s.seatReserved),
+      ...students.normalWaitingStudents
+    ];
+    student = allWaiting[index];
+  }
+  
+  if (!student) return;
+  
+  currentEditStudent = { classId, type, index, student: {...student} };
+  currentEditStudentClassId = classId;
+  
+  document.getElementById('editStudentModalTitle').textContent = "Edit Student";
+  document.getElementById('editStudentName').value = student.name;
+  document.getElementById('editStudentDate').value = student.date;
+  
+  // Determine type
+  let studentType = 'confirmed';
+  let position = 1;
+  let seatReserved = '';
+  
+  if (type === 'confirmed') {
+    studentType = 'confirmed';
+  } else if (student.type === 'confirm') {
+    studentType = student.seatReserved ? 'confirmWaiting' : 'confirmWaiting';
+    position = student.position || 1;
+    seatReserved = student.seatReserved || '';
+  } else if (student.type === 'normal') {
+    studentType = 'normalWaiting';
+    position = student.position || 1;
+  }
+  
+  document.getElementById('editStudentType').value = studentType;
+  document.getElementById('editSeatNumber').value = student.seatNo || '';
+  document.getElementById('editPosition').value = position;
+  document.getElementById('editSeatReserved').value = seatReserved;
+  
+  toggleStudentFields();
+  document.getElementById('editStudentError').style.display = 'none';
+  editStudentModal.style.display = 'flex';
+}
+
+function toggleStudentFields() {
+  const type = document.getElementById('editStudentType').value;
+  const seatNumberGroup = document.getElementById('seatNumberGroup');
+  const positionGroup = document.getElementById('positionGroup');
+  const seatReservedGroup = document.getElementById('seatReservedGroup');
+  
+  if (type === 'confirmed') {
+    seatNumberGroup.style.display = 'block';
+    positionGroup.style.display = 'none';
+    seatReservedGroup.style.display = 'none';
+  } else if (type === 'confirmWaiting') {
+    seatNumberGroup.style.display = 'none';
+    positionGroup.style.display = 'block';
+    seatReservedGroup.style.display = 'block';
+  } else if (type === 'normalWaiting') {
+    seatNumberGroup.style.display = 'none';
+    positionGroup.style.display = 'block';
+    seatReservedGroup.style.display = 'none';
+  }
+}
+
+function closeEditStudentModal() {
+  editStudentModal.style.display = 'none';
+  currentEditStudent = null;
+  currentEditStudentClassId = null;
+}
+
+function saveStudentChanges() {
+  const classId = currentEditStudentClassId;
+  const students = studentsData[classId];
+  const classData = data.find(c => c.id === classId);
+  
+  if (!students || !classData) return;
+  
+  const name = document.getElementById('editStudentName').value;
+  const type = document.getElementById('editStudentType').value;
+  const seatNo = parseInt(document.getElementById('editSeatNumber').value);
+  const position = parseInt(document.getElementById('editPosition').value);
+  const date = document.getElementById('editStudentDate').value;
+  const seatReserved = parseInt(document.getElementById('editSeatReserved').value) || null;
+  
+  // Validation
+  const errorDiv = document.getElementById('editStudentError');
+  if (!name || !date) {
+    errorDiv.textContent = "Please enter student name and date.";
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  if (type === 'confirmed' && (!seatNo || seatNo < 1)) {
+    errorDiv.textContent = "Please enter a valid seat number for confirmed student.";
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  if ((type === 'confirmWaiting' || type === 'normalWaiting') && (!position || position < 1)) {
+    errorDiv.textContent = "Please enter a valid position for waiting list.";
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  // Check if editing existing student or adding new
+  if (currentEditStudent) {
+    // Editing existing student
+    const { classId: editClassId, type: oldType, index, student: oldStudent } = currentEditStudent;
+    
+    // Remove from old location
+    if (oldType === 'confirmed') {
+      students.confirmedStudents.splice(index, 1);
+    } else if (oldType === 'waiting') {
+      // Need to find where it was
+      if (oldStudent.type === 'confirm') {
+        const confirmIndex = students.confirmWaitingStudents.findIndex(s => s.name === oldStudent.name && s.date === oldStudent.date);
+        if (confirmIndex !== -1) students.confirmWaitingStudents.splice(confirmIndex, 1);
+      } else if (oldStudent.type === 'normal') {
+        const normalIndex = students.normalWaitingStudents.findIndex(s => s.name === oldStudent.name && s.date === oldStudent.date);
+        if (normalIndex !== -1) students.normalWaitingStudents.splice(normalIndex, 1);
+      }
+    }
+    
+    // Update counts if needed
+    if (oldType === 'confirmed' && type !== 'confirmed') {
+      classData.available++;
+    }
+  }
+  
+  // Add to new location
+  if (type === 'confirmed') {
+    // Check if seat is already taken
+    const allUsedSeats = [
+      ...students.confirmedStudents.map(s => s.seatNo),
+      ...students.confirmWaitingStudents.map(s => s.seatReserved).filter(s => s)
+    ];
+    
+    if (allUsedSeats.includes(seatNo) && (!currentEditStudent || currentEditStudent.student.seatNo !== seatNo)) {
+      errorDiv.textContent = `Seat ${seatNo} is already taken. Please choose another seat.`;
+      errorDiv.style.display = 'block';
+      return;
+    }
+    
+    students.confirmedStudents.push({ name, seatNo, date });
+    students.confirmedStudents.sort((a, b) => a.seatNo - b.seatNo);
+    
+    // If this seat was from admission seats, update available count
+    if (seatNo <= classData.admissionSeats) {
+      classData.available = Math.max(0, classData.available - 1);
+    }
+  } 
+  else if (type === 'confirmWaiting') {
+    const studentObj = { name, position, date, type: 'confirm' };
+    if (seatReserved) {
+      studentObj.seatReserved = seatReserved;
+      
+      // Check if seat is already taken
+      const allUsedSeats = [
+        ...students.confirmedStudents.map(s => s.seatNo),
+        ...students.confirmWaitingStudents.map(s => s.seatReserved).filter(s => s)
+      ];
+      
+      if (allUsedSeats.includes(seatReserved) && (!currentEditStudent || currentEditStudent.student.seatReserved !== seatReserved)) {
+        errorDiv.textContent = `Seat ${seatReserved} is already taken. Please choose another seat.`;
+        errorDiv.style.display = 'block';
+        return;
+      }
+      
+      // If reserved seat is from admission seats, update available count
+      if (seatReserved <= classData.admissionSeats) {
+        classData.available = Math.max(0, classData.available - 1);
+      }
+    }
+    
+    students.confirmWaitingStudents.push(studentObj);
+    students.confirmWaitingStudents.sort((a, b) => a.position - b.position);
+    
+    // Update confirm waiting count
+    classData.confirmWaiting = students.confirmWaitingStudents.length;
+  } 
+  else if (type === 'normalWaiting') {
+    students.normalWaitingStudents.push({ name, position, date, type: 'normal' });
+    students.normalWaitingStudents.sort((a, b) => a.position - b.position);
+    
+    // Update normal waiting count
+    classData.normalWaiting = students.normalWaitingStudents.length;
+  }
+  
+  // Re-render
+  renderClasses();
+  
+  // Update students panel
+  if (studentsPanel.style.display === 'block' && classSelect.value === classId) {
+    showStudentsPanel(classId);
+  }
+  
+  closeEditStudentModal();
+  alert("Student saved successfully!");
+}
+
+function removeStudent(classId, type, index) {
+  if (!confirm("Are you sure you want to remove this student?")) {
+    return;
+  }
+  
+  const students = studentsData[classId];
+  const classData = data.find(c => c.id === classId);
+  
+  if (!students || !classData) return;
+  
+  let removedStudent;
+  
+  if (type === 'confirmed') {
+    removedStudent = students.confirmedStudents.splice(index, 1)[0];
+    
+    // If seat was from admission seats, increase available count
+    if (removedStudent.seatNo <= classData.admissionSeats) {
+      classData.available++;
+    }
+  } else if (type === 'waiting') {
+    // Need to find which waiting list
+    const allWaiting = [
+      ...students.confirmWaitingStudents.filter(s => !s.seatReserved),
+      ...students.normalWaitingStudents
+    ];
+    
+    if (index < allWaiting.length) {
+      removedStudent = allWaiting[index];
+      
+      if (removedStudent.type === 'confirm') {
+        const confirmIndex = students.confirmWaitingStudents.findIndex(s => 
+          s.name === removedStudent.name && s.date === removedStudent.date
+        );
+        if (confirmIndex !== -1) {
+          removedStudent = students.confirmWaitingStudents.splice(confirmIndex, 1)[0];
+          
+          // If had reserved seat from admission seats, increase available count
+          if (removedStudent.seatReserved && removedStudent.seatReserved <= classData.admissionSeats) {
+            classData.available++;
+          }
+          
+          // Update confirm waiting count
+          classData.confirmWaiting = students.confirmWaitingStudents.length;
+        }
+      } else if (removedStudent.type === 'normal') {
+        const normalIndex = students.normalWaitingStudents.findIndex(s => 
+          s.name === removedStudent.name && s.date === removedStudent.date
+        );
+        if (normalIndex !== -1) {
+          students.normalWaitingStudents.splice(normalIndex, 1);
+          
+          // Update normal waiting count
+          classData.normalWaiting = students.normalWaitingStudents.length;
+        }
+      }
+    }
+  }
+  
+  // Re-render
+  renderClasses();
+  
+  // Update students panel
+  if (studentsPanel.style.display === 'block' && classSelect.value === classId) {
+    showStudentsPanel(classId);
+  }
+  
+  alert("Student removed successfully!");
+}
+
+// Modal Functions
+function closeModalFunc() {
+  modal.style.display = "none";
+  modalCancel.style.display = "block";
+  modalConfirm.onclick = executeAction;
+  modalConfirm.disabled = false;
+  currentStudentName = "";
+}
+
+// Modal event listeners
+modalConfirm.addEventListener("click", executeAction);
+modalCancel.addEventListener("click", closeModalFunc);
+closeModal.addEventListener("click", closeModalFunc);
+window.addEventListener("click", (e) => {
+  if (e.target === modal) closeModalFunc();
+  if (e.target === editClassModal) closeEditClassModal();
+  if (e.target === editStudentModal) closeEditStudentModal();
+});
+</script>
+</body>
+</html>
